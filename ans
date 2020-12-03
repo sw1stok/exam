@@ -9,7 +9,11 @@
       command: docker rename calc calc-old
       ignore_errors: true
     - name: "Image calc create"
-      command: docker pull nginx:latest
+      docker_image:
+        build:
+          dockerfile: /root/git/dockerfile
+          path: /root/git
+        state: present
       register: cs
       ignore_errors: true
     - name: "Container calc create"
