@@ -14,11 +14,13 @@
           dockerfile: /root/git/dockerfile
           path: /root/git
         state: present
+        tag: 1
       register: cs
       ignore_errors: true
     - name: "Container calc create"
       docker_container:
         name: calc
+        image: "nginx:1" 
         volumes: /temp-calc:/usr/share/nginx
         published_ports: 8080:80
       ignore_errors: true
@@ -26,5 +28,11 @@
       docker_container:
         name: calc-old
         state: started
-      when: cs is succeeded 
+      when: cs is failed 
       ignore_errors: true
+    - name: "del old cont"
+      docker_container:
+        name: calc-old
+        state: absent
+      when: cs is succeeded
+      ignore_errors: true 
